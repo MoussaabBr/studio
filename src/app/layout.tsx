@@ -1,22 +1,18 @@
+
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google'; // Using Inter for a clean, modern look
 import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-sans', // Using CSS variable for font
 });
 
 export const metadata: Metadata = {
-  title: 'Auth Starter',
-  description: 'A simple authentication application by Firebase Studio',
+  title: 'Auth Starter Pro', // Updated title
+  description: 'A professionally styled authentication application by Firebase Studio', // Updated description
 };
 
 export default function RootLayout({
@@ -25,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={inter.variable}>
+      <body className={`font-sans antialiased bg-background text-foreground`}>
         <AuthProvider>
           {children}
           <Toaster />

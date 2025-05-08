@@ -11,6 +11,7 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Only redirect once loading is complete
     if (!isLoading) {
       if (isAuthenticated) {
         router.replace('/dashboard');
@@ -20,5 +21,6 @@ export default function HomePage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  // Show loading page while auth state is being determined
   return <LoadingPage />;
 }
