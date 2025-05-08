@@ -1,20 +1,40 @@
-# Use the official Node.js image as a base image
-FROM node:20
+# ──────────────── Builder Stage ────────────────
+FROM node:20-alpine AS builder
 
-# Set the working directory in the container
+# 1. Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# 2. Install dependencies based on your lockfile
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of your application code to the working directory
+# 3. Copy the rest of your source code
 COPY . .
 
-# Expose the port your application listens on (adjust as needed)
-EXPOSE 3000
+# 4. Build for production
+ENV NODE_ENV=production
+RUN npm run build
 
-# Define the command to run your application
-#CMD ["node", "server.js"]
+
+# ─────────────── Production Stage ───────────────
+FROM node:20-alpine AS production
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+# 1. Copy only package files, then install production deps
+COPY --from=builder /app/package*.json ./
+RUN npm ci --omit=dev
+
+# 2. Copy the compiled output
+COPY --from=builder /app/.next ./.next
+
+# 3. Copy any static assets if you have them
+#    — uncomment only if these folders/files exist in your project!
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/next.config.js ./
+# COPY --from=builder /app/components.json ./
+
+# 4. Expose and launch
+EXPOSE 3000
+CMD ["npm", "start"]

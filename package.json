@@ -2,6 +2,22 @@
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
+  "description": "This is a NextJS starter in Firebase Studio.",
+  "homepage": "https://github.com/MoussaabBr/studio#readme",
+  "bugs": {
+    "url": "https://github.com/MoussaabBr/studio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoussaabBr/studio.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
@@ -44,7 +60,7 @@
     "genkit": "^1.6.2",
     "iron-session": "^8.0.2",
     "lucide-react": "^0.475.0",
-    "next": "15.2.3",
+    "next": "^15.3.2",
     "patch-package": "^8.0.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
