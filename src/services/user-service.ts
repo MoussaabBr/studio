@@ -1,48 +1,72 @@
 
 'use server';
-import type { User as FirebaseUser } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { prisma } from '@/lib/db';
+import type { User } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
-export interface UserProfile {
-  uid: string;
+export type UserProfile = Omit<User, 'password'>; // Exclude password from profile type
+
+export interface CreateUserInput {
+  email: string;
   username: string;
-  email: string | null;
-  createdAt: any; // Firebase ServerTimestamp
-  updatedAt?: any;
+  password_DO_NOT_LOG: string; // Raw password, ensure not logged
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  const userDocRef = doc(db, 'users', uid);
-  const userDocSnap = await getDoc(userDocRef);
-
-  if (userDocSnap.exists()) {
-    return userDocSnap.data() as UserProfile;
-  }
-  return null;
+  const user = await prisma.user.findUnique({
+    where: { id: uid },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return user;
 }
 
-export async function createUserProfile(
-  firebaseUser: FirebaseUser,
-  customUsername?: string
-): Promise<UserProfile> {
-  const userDocRef = doc(db, 'users', firebaseUser.uid);
-  
-  const username = customUsername || firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'AnonymousUser';
-  const email = firebaseUser.email;
-
-  const newUserProfile: UserProfile = {
-    uid: firebaseUser.uid,
-    username,
-    email,
-    createdAt: serverTimestamp(),
-  };
-
-  await setDoc(userDocRef, newUserProfile);
-  return newUserProfile;
+export async function getUserByEmail(email: string): Promise<User | null> {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  return user;
 }
 
-export async function updateUserProfile(uid: string, data: Partial<UserProfile>): Promise<void> {
-  const userDocRef = doc(db, 'users', uid);
-  await setDoc(userDocRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
+export async function createUser(data: CreateUserInput): Promise<UserProfile> {
+  const hashedPassword = await bcrypt.hash(data.password_DO_NOT_LOG, 10);
+
+  const newUser = await prisma.user.create({
+    data: {
+      email: data.email,
+      username: data.username,
+      password: hashedPassword,
+    },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return newUser;
+}
+
+export async function updateUserProfile(uid: string, data: Partial<Omit<User, 'id' | 'createdAt' | 'password'>>): Promise<UserProfile | null> {
+  const updatedUser = await prisma.user.update({
+    where: { id: uid },
+    data: {
+      ...data,
+      // password should be updated via a separate "change password" flow
+    },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return updatedUser;
 }

@@ -13,7 +13,7 @@ import { UserCircle2, Mail, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function DashboardPage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, fetchCurrentUser } = useAuth(); // Added fetchCurrentUser
   const router = useRouter();
 
   useEffect(() => {
@@ -22,7 +22,18 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  // Re-fetch user if navigating back to dashboard and user might be stale
+  // This can happen if session was invalidated on server but client state isn't updated
+  useEffect(() => {
+    if (isAuthenticated && !user && !isLoading) {
+        fetchCurrentUser();
+    }
+  }, [isAuthenticated, user, isLoading, fetchCurrentUser]);
+
+
   if (isLoading || !isAuthenticated || !user) {
+    // If not loading but also not authenticated, redirect handled by above useEffect
+    // This just ensures we show loading until user data is available or redirect happens
     return <LoadingPage />;
   }
 
@@ -35,8 +46,9 @@ export default function DashboardPage() {
     return name[0].toUpperCase();
   };
   
-  const registrationDate = user.createdAt?.seconds 
-    ? format(new Date(user.createdAt.seconds * 1000), "MMMM d, yyyy")
+  // Prisma returns Date objects or ISO strings which can be directly used with `new Date()`
+  const registrationDate = user.createdAt 
+    ? format(new Date(user.createdAt), "MMMM d, yyyy")
     : "Not available";
 
 
@@ -47,7 +59,7 @@ export default function DashboardPage() {
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20 border-2 border-accent">
               {/* Placeholder for user avatar image */}
-              <AvatarImage src={`https://picsum.photos/seed/${user.uid}/128/128`} alt={user.username} data-ai-hint="profile avatar" />
+              <AvatarImage src={`https://picsum.photos/seed/${user.id}/128/128`} alt={user.username} data-ai-hint="profile avatar"/>
               <AvatarFallback className="text-2xl bg-accent text-accent-foreground">
                 {getInitials(user.username)}
               </AvatarFallback>
