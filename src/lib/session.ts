@@ -1,9 +1,9 @@
 
 import type { IronSessionOptions } from 'iron-session';
-import type { User } from '@prisma/client'; // Using Prisma User type
+import type { UserProfile } from '@/services/user-service'; // Using UserProfile from service
 
 export interface SessionData {
-  user?: Omit<User, 'password'>; // Store user data without password
+  user?: UserProfile; // Store user data without password
   isLoggedIn?: boolean;
 }
 

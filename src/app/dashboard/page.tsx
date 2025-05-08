@@ -46,9 +46,8 @@ export default function DashboardPage() {
     return name[0].toUpperCase();
   };
   
-  // Prisma returns Date objects or ISO strings which can be directly used with `new Date()`
   const registrationDate = user.createdAt 
-    ? format(new Date(user.createdAt), "MMMM d, yyyy")
+    ? format(new Date(user.createdAt), "MMMM d, yyyy") // user.createdAt is now an ISO string
     : "Not available";
 
 
