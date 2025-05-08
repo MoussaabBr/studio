@@ -6,5 +6,45 @@
     "password": "$2a$10$Y8iX.A5gVvVHyCHG.MpH/.KxVQM7x0S8jVOzPXtFQQK6XFRU6hG9.",
     "createdAt": "2024-07-28T10:00:00.000Z",
     "updatedAt": "2024-07-28T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "email": "alice@example.com",
+    "username": "alice",
+    "password": "$2a$10$mPaA9Q2g9v2xW8B8n0E7UOz4gYkHn3y6F5sJ.wWd5H/q.oIu7O0r2",
+    "createdAt": "2024-07-30T12:00:00.000Z",
+    "updatedAt": "2024-07-30T12:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "email": "bob@example.com",
+    "username": "bob",
+    "password": "$2a$10$jN3sD.kR1oF6H8G.wV9sA.uC1xI5eY.tP7gK.lOq3iJ.zX.pS4aQm",
+    "createdAt": "2024-07-30T12:00:00.000Z",
+    "updatedAt": "2024-07-30T12:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "email": "charlie@example.com",
+    "username": "charlie",
+    "password": "$2a$10$yL.V/U.wP.xS.mF.iH.oO.eD7nK.qT.sR.jG.cZ.bA.uW.aO.e9j.y",
+    "createdAt": "2024-07-30T12:00:00.000Z",
+    "updatedAt": "2024-07-30T12:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "email": "diana@example.com",
+    "username": "diana",
+    "password": "$2a$10$s.G.Q.oR.k.E.f.t.E.gA.v.hV4.R1l.o.O0iH/q.P8Y.I.W.n.e.",
+    "createdAt": "2024-07-30T12:00:00.000Z",
+    "updatedAt": "2024-07-30T12:00:00.000Z"
+  },
+  {
+    "id": "6",
+    "email": "eva@example.com",
+    "username": "eva",
+    "password": "$2a$10$d.U5gV.pT.f.R.v.L1e.r.H.m.T.o.K.u.S.g.Q.s.X.b.C.e.W.k",
+    "createdAt": "2024-07-30T12:00:00.000Z",
+    "updatedAt": "2024-07-30T12:00:00.000Z"
   }
 ]
